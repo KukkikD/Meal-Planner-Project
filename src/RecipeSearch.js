@@ -23,6 +23,22 @@ class RecipeSearch {
        return []; // Returns empty array on error
      }
    }
+
+   async getRecipeById(recipeId) {
+      try {
+        const response = await fetch(`https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${this.apiKey}`);
+        
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+    
+        const data = await response.json();
+        return data; // ส่งกลับข้อมูลสูตร
+      } catch (error) {
+        console.error('Failed to fetch recipe:', error);
+        return null; // ส่งกลับ null ถ้ามีข้อผิดพลาด
+      }
+   }
  }
  
  export default RecipeSearch;

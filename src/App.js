@@ -40,6 +40,6 @@ document.querySelector('#recipesContainer').addEventListener('click', async (e) 
    if (e.target.closest('.recipe-card')) {
        const recipeId = e.target.closest('.recipe-card').dataset.id; 
        localStorage.setItem('selectedRecipeId', recipeId); // Save recipe ID in Local Storage
-       window.location.href = './recipes.html?recipeId=' + recipeId; // Go to recipe.html and submit ID
+       window.location.href = '/src/recipes/recipes.html?recipeId=' + recipeId; // Go to recipe.html and submit ID
    }
 });

@@ -192,3 +192,30 @@ main {
 .shopping-list ul li input[type="checkbox"] {
   margin-right: 1rem;
 }
+
+#ingredientsContainer {
+  display: flex; /* ทำให้ container เป็น flexbox */
+  flex-wrap: wrap; /* ให้วัตถุดิบเรียงต่อกันได้ */
+  gap: 10px; /* เพิ่มช่องว่างระหว่างวัตถุดิบ */
+}
+
+.ingredient-card {
+  display: flex; /* ทำให้วัตถุดิบเป็น flexbox */
+  align-items: center; /* จัดให้อยู่ตรงกลางในแนวตั้ง */
+  border: 1px solid #ccc; /* เส้นกรอบเล็กน้อย */
+  padding: 10px; /* ช่องว่างภายใน */
+  border-radius: 5px; /* มุมที่มน */
+}
+
+.ingredient-image {
+  width: 50px; /* ขนาดความกว้างของรูปภาพ */
+  height: auto; /* ให้ความสูงตามสัดส่วน */
+  margin-right: 10px; /* ช่องว่างระหว่างรูปภาพและข้อความ */
+}
+
+@media screen and (min-width: 500px) {
+  body {
+    max-width: 1080px;
+    margin: auto;
+  }
+}
