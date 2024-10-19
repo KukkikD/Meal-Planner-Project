@@ -10,6 +10,7 @@
   /* Font family variables */
   --primary-font: 'Roboto', sans-serif;
   --secondary-font: 'Merriweather', serif;
+  --font-headline: "Arial Narrow Bold", sans-serif;
 }
 
 /* General reset */
@@ -33,11 +34,30 @@ header {
   color: #fff;
   padding: 1rem;
   text-align: center;
+  
 }
 
 header .logo {
   background: transparent;
   height: min-content;
+}
+.logo {
+
+  overflow: hidden;
+  font-size: 30px;
+  text-align: center;
+  font-family: var(--font-headline);
+  
+}
+.logo img {
+  width: 90px;
+  height: 90px;
+}
+.logo a {
+  text-decoration: none;
+  color: var(--secondary-color);
+  font-size: 20px;
+  font-weight: 100px;
 }
 
 header h1 {

@@ -8,7 +8,9 @@
   },
   "author": "Amonrat D. Howard <adeezon9@gmail.com",
   "dependencies": {
-    "parcel": "^2.8.3",
     "prettier": "^2.8.4"
+  },
+  "devDependencies": {
+    "parcel": "^2.12.0"
   }
 }
