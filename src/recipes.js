@@ -1,4 +1,4 @@
-import { setLocalStorage, getLocalStorage } from "./src/utils.mjs";
+import { setLocalStorage, getLocalStorage } from "./utils.js";
 
 async function getIngredients(recipeId) {
   const apiKey = "a905b34156124719af649f3347619292"; // my API Key 
