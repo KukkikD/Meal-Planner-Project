@@ -1,11 +1,59 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>My Cool Project</title>
-    <link media="screen" rel="stylesheet" href="css/main.css" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="src/index.js"></script>
-  </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Planner - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="/src/app.js" type="module"></script>
+ 
+</head>
+<body>
+    <header id="header-container"></header>
+
+  <main>
+    <section class="search-recipes">
+        <h2>Find Recipes</h2>
+        <form id="searchForm">
+            <label for="searchInput">Enter Meal or Ingredient:</label>
+            <input type="text" id="searchInput" placeholder="e.g., Chicken, Vegan">
+            <button type="submit">Search</button>
+        </form>
+    </section>
+
+    <section id="recipeResults">
+        <h2>Recipe Results</h2>
+        <div id="recipesContainer">
+            <!-- Recipe results will be injected here -->
+        </div>
+    </section>
+    <section class="add-meal">
+      <h2>Add a Meal</h2>
+      <div>
+          <label for="mealInput">Meal:</label>
+          <input type="text" id="mealInput" placeholder="Enter meal name">
+      </div>
+      <div>
+          <label for="dayInput">Day:</label>
+          <select id="dayInput">
+              <option value="">Select a day</option>
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+              <option value="Sunday">Sunday</option>
+          </select>
+      </div>
+      <button id="addMealBtn">Add Meal</button>
+  </section>
+  </main>
+
+    <!-- Footer container -->
+  <footer id="footer-container"></foooter>
+
+    
+</body>
 </html>

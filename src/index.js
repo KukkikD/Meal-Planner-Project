@@ -1,3 +1,5 @@
-import App from './App';
+import { loadHeader, loadFooter } from "./utils.js";
 
-document.getElementById('root').appendChild(App());
+    // Load the header and footer dynamically
+    loadHeader("header-container");
+    loadFooter("footer-container");

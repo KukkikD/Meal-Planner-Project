@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Planner - Weekly Plan</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="/index.html">
+                <img src="/public/images/logo.png" alt="Logo" width="150" height="150">
+                <span class="highlight"></span>
+            </a>
+        </div>
+        <h1>Weekly Meal Planner</h1>
+        <nav>
+            <a href="/src/recipes/recipes.html">Search Recipes</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="meal-planner">
+            <h2>Your Meal Plan</h2>
+            <div class="weekly-plan">
+                <div class="day">
+                    <h3>Monday</h3>
+                    <ul id="mondayMeals">
+                        <!-- Monday's meals go here -->
+                    </ul>
+                </div>
+                <div class="day">
+                    <h3>Tuesday</h3>
+                    <ul id="tuesdayMeals">
+                        <!-- Tuesday's meals go here -->
+                    </ul>
+                </div>
+                <div class="day">
+                    <h3>Wednesday</h3>
+                    <ul id="wednesdayMeals">
+                        <!-- Wednesday's meals go here -->
+                    </ul>
+                </div>
+                <div class="day">
+                    <h3>Thursday</h3>
+                    <ul id="thursdayMeals">
+                        <!-- Thursday's meals go here -->
+                    </ul>
+                </div>
+                <div class="day">
+                    <h3>Friday</h3>
+                    <ul id="fridayMeals">
+                        <!-- Friday's meals go here -->
+                    </ul>
+                </div>
+                <div class="day">
+                    <h3>Saturday</h3>
+                    <ul id="saturdayMeals">
+                        <!-- Saturday's meals go here -->
+                    </ul>
+                </div>
+                <div class="day">
+                    <h3>Sunday</h3>
+                    <ul id="sundayMeals">
+                        <!-- Sunday's meals go here -->
+                    </ul>
+                </div>
+            </div>
+            <button id="generateShoppingList">Generate Shopping List</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Meal Planner | Project of Amornrat D. Howard</p>
+    </footer>
+
+    <script src="/src/app.js" type="module"></script>
+</body>
+</html>

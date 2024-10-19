@@ -1,45 +1,40 @@
-import { createElement } from './utils';
-import { initRouter } from './router';
+import { loadHeader, loadFooter } from './utils.js';
+import MealPlanner from './MealPlanner.js';
+import RecipeSearch from './RecipeSearch.js';
+import UI from './UI.js';
 
-function Header(mainDiv) {
-  const appTitle = createElement('h1', {
-    textContent: 'My Cool Project',
-    className: 'heading',
-  });
+loadHeader('header-container');
+loadFooter('footer-container');
 
-  // nav items
-  const page1 = createElement('a', {
-    href: '/#/page1',
-    textContent: 'Page 1',
-  });
-  const page2 = createElement('a', {
-    href: '/#/page2',
-    textContent: 'Page 2',
-  });
-  const page3 = createElement('a', {
-    href: '/#/page3',
-    textContent: 'Page 3',
-  });
 
-  const nav = createElement('nav', {}, [page1, page2, page3]);
+const mealPlanner = new MealPlanner();
+const recipeSearch = new RecipeSearch("a905b34156124719af649f3347619292");
 
-  return createElement('header', {}, [appTitle, nav]);
-}
+// Event listener for searching recipes
+document.querySelector('#searchForm').addEventListener('submit', async (e) => {
+   e.preventDefault();
+   const query = document.querySelector('#searchInput').value;
+   const recipes = await recipeSearch.searchRecipes(query);
+   UI.displayRecipes(recipes);
+});
 
-function Footer() {
-  const copyright = createElement('span', {
-    textContent: `Copyright © ${new Date().getFullYear()}`,
-  });
 
-  return createElement('footer', {}, [copyright]);
-}
+// Event listener for adding meals
+document.querySelector('#addMealBtn').addEventListener('click', () => {
+   const mealInput = document.querySelector('#mealInput').value;
+   const dayInput = document.querySelector('#dayInput').value;
 
-function App() {
-  const main = createElement('main', {}, []);
-
-  initRouter(main);
-
-  return createElement('div', {}, [Header(main), main, Footer()]);
-}
-
-export default App;
+   if (mealInput && dayInput) {
+       // ใช้เมธอด addMeal ใน MealPlanner
+       mealPlanner.addMeal(dayInput, mealInput);
+       
+       // แสดงมื้ออาหารที่เพิ่มไปยัง UI
+       UI.displayMeal(dayInput, mealInput);
+       
+       // เคลียร์ฟิลด์ฟอร์มหลังจากเพิ่ม
+       document.querySelector('#mealInput').value = '';
+       document.querySelector('#dayInput').value = '';
+   } else {
+       alert('Please enter a meal and select a day.');
+   }
+});
