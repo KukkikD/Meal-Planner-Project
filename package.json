@@ -7,10 +7,8 @@
     "build": "parcel build index.html"
   },
   "author": "Amonrat D. Howard <adeezon9@gmail.com",
-  "dependencies": {
-    "prettier": "^2.8.4"
-  },
   "devDependencies": {
-    "parcel": "^2.12.0"
+    "parcel": "^2.12.0",
+    "prettier": "^3.3.3"
   }
 }

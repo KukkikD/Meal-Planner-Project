@@ -1,23 +1,15 @@
-// Function to load the header from header.html
-export function loadHeader(containerId) {
-  fetch("./public/partials/header.html")
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById(containerId).innerHTML = data;
-    })
-    .catch(error => {
-      console.error("Error loading header:", error);
-    });
+// ฟังก์ชันสำหรับตั้งค่า Local Storage
+export function setLocalStorage(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
 }
 
-// Function to load the footer from footer.html
-export function loadFooter(containerId) {
-  fetch("./public/partials/footer.html")
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById(containerId).innerHTML = data;
-    })
-    .catch(error => {
-      console.error("Error loading footer:", error);
-    });
+// ฟังก์ชันสำหรับดึงข้อมูลจาก Local Storage
+export function getLocalStorage(key) {
+  const value = localStorage.getItem(key);
+  return value ? JSON.parse(value) : null; // ถ้าไม่มีข้อมูลให้คืนค่า null
+}
+
+// ฟังก์ชันสำหรับลบข้อมูลใน Local Storage
+export function removeLocalStorage(key) {
+  localStorage.removeItem(key);
 }

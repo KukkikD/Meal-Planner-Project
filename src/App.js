@@ -1,10 +1,6 @@
-import { loadHeader, loadFooter } from './utils.js';
 import MealPlanner from './MealPlanner.js';
 import RecipeSearch from './RecipeSearch.js';
 import UI from './UI.js';
-
-loadHeader('header-container');
-loadFooter('footer-container');
 
 
 const mealPlanner = new MealPlanner();
@@ -25,16 +21,25 @@ document.querySelector('#addMealBtn').addEventListener('click', () => {
    const dayInput = document.querySelector('#dayInput').value;
 
    if (mealInput && dayInput) {
-       // ใช้เมธอด addMeal ใน MealPlanner
+       // use Method addMeal in MealPlanner
        mealPlanner.addMeal(dayInput, mealInput);
        
-       // แสดงมื้ออาหารที่เพิ่มไปยัง UI
+       // display meal to UI
        UI.displayMeal(dayInput, mealInput);
        
-       // เคลียร์ฟิลด์ฟอร์มหลังจากเพิ่ม
+       // Clear form fields after adding
        document.querySelector('#mealInput').value = '';
        document.querySelector('#dayInput').value = '';
    } else {
        alert('Please enter a meal and select a day.');
+   }
+});
+
+// Event listener for recipe card clicks
+document.querySelector('#recipesContainer').addEventListener('click', async (e) => {
+   if (e.target.closest('.recipe-card')) {
+       const recipeId = e.target.closest('.recipe-card').dataset.id; 
+       localStorage.setItem('selectedRecipeId', recipeId); // Save recipe ID in Local Storage
+       window.location.href = './src/recipes/recipe.html?recipeId=' + recipeId; // Go to recipe.html and submit ID
    }
 });

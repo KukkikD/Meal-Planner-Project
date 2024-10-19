@@ -6,12 +6,19 @@
     <title>Meal Planner - Recipes</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/main.css">
-    <script src="/src/app.js" type="module"></script>
-   
+    <script src="/src/recipes.js" type="module"></script>
 </head>
 <body>
-    <!-- Header container -->
-    <header id="header-container"></header>
+    <header id="header-container">
+        <div class="logo">
+          <img src="/public/images/logo.png" alt="Logo"/>
+           <a href="/index.html">  Meal<span class="highlight">Planner</span></a>
+        </div>
+        <h1>Welcome to the Meal Planner</h1>
+        <nav>
+            <a href="/src/MealPlanner/planner.html">Weekly Meal Planner</a>
+        </nav>
+    </header>
 
     <main>
         <section id="recipeResults">
@@ -22,6 +29,8 @@
         </section>
     </main>
 
-    <footer id="footer-container"></footer>
+    <footer id="footer-container">
+        <p>&copy; 2024 Meal Planner | Project of Amornrat D. Howard </p>
+    </footer>
 </body>
 </html>

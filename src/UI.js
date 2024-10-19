@@ -5,17 +5,15 @@ class UI {
      recipesContainer.innerHTML = ''; // ลบผลลัพธ์เดิมออก
  
      recipes.forEach(recipe => {
-       const recipeElement = document.createElement('div');
-       recipeElement.classList.add('recipe');
-       
-       // ใส่ข้อมูลสูตรอาหาร
-       recipeElement.innerHTML = `
-         <h3>${recipe.title}</h3>
-         <img src="${recipe.image}" alt="${recipe.title}">
-       `;
-       
-       recipesContainer.appendChild(recipeElement);
-     });
+      const recipeCard = document.createElement('div');
+      recipeCard.className = 'recipe-card';
+      recipeCard.dataset.id = recipe.id; // สมมุติว่า recipe มี id
+      recipeCard.innerHTML = `
+          <img src="${recipe.image}" alt="${recipe.title}" />
+          <h3>${recipe.title}</h3>
+      `;
+      recipesContainer.appendChild(recipeCard);
+  });
  
      // การทำให้มี Animation เมื่อสูตรอาหารแสดงขึ้นมา
      recipesContainer.querySelectorAll('.recipe').forEach((recipeElement, index) => {

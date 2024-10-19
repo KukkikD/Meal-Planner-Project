@@ -1,9 +1,3 @@
-import { loadHeader, loadFooter } from './utils.js';
-
-    // Load the header and footer dynamically
-    loadHeader("header-container");
-    loadFooter("footer-container");
-
 class MealPlanner {
   constructor() {
      this.weeklyMeals = {}; // Object to store meals for each day
