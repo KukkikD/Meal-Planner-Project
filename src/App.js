@@ -1,3 +1,5 @@
+const baseURL = 'https://mealplannerwdd330.netlify.app/'; // Add this line for the API base URL
+
 import MealPlanner from './MealPlanner.js';
 import RecipeSearch from './RecipeSearch.js';
 import UI from './UI.js';
@@ -40,6 +42,6 @@ document.querySelector('#recipesContainer').addEventListener('click', async (e) 
    if (e.target.closest('.recipe-card')) {
        const recipeId = e.target.closest('.recipe-card').dataset.id; 
        localStorage.setItem('selectedRecipeId', recipeId); // Save recipe ID in Local Storage
-       window.location.href = '/src/recipes/recipes.html?recipeId=' + recipeId; // Go to recipe.html and submit ID
+       window.location.href = 'https://mealplannerwdd330.netlify.app/recipes.html?recipeId=' + recipeId; // Go to recipe.html and submit ID
    }
 });
