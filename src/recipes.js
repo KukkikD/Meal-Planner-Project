@@ -80,7 +80,7 @@ document.getElementById("addToPlanner").addEventListener("click", () => {
     // Check if this menu has been added to the plan.
     if (!plannerItems.includes(recipeId)) {
       plannerItems.push(recipeId); // Add a menu to your weekly plan
-      setLocalStorage("weekly-planner", plannerItems); // Update LocalStorage
+      setLocalStorage("weekly-planner", plannerItems); // อัปเดต LocalStorage
 
       alert("Recipe added to your weekly planner!");
     } else {

@@ -33,10 +33,10 @@ class RecipeSearch {
         }
     
         const data = await response.json();
-        return data; // ส่งกลับข้อมูลสูตร
+        return data; // Return to recipe
       } catch (error) {
         console.error('Failed to fetch recipe:', error);
-        return null; // ส่งกลับ null ถ้ามีข้อผิดพลาด
+        return null; // retrun to  null if error
       }
    }
  }

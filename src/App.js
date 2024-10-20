@@ -14,26 +14,26 @@ document.querySelector('#searchForm').addEventListener('submit', async (e) => {
    UI.displayRecipes(recipes);
 });
 
-
 // Event listener for adding meals
 document.querySelector('#addMealBtn').addEventListener('click', () => {
-   const mealInput = document.querySelector('#mealInput').value;
-   const dayInput = document.querySelector('#dayInput').value;
+    const mealInput = document.querySelector('#mealInput').value;
+    const dayInput = document.querySelector('#dayInput').value;
+  
+    if (mealInput && dayInput) {
+        // use Method addMeal in MealPlanner
+        mealPlanner.addMeal(dayInput, mealInput);
+        
+        // display meal to UI
+        UI.displayMeal(dayInput, mealInput);
+        
+        // Clear form fields after adding
+        document.querySelector('#mealInput').value = '';
+        document.querySelector('#dayInput').value = '';
+    } else {
+        alert('Please enter a meal and select a day.');
+    }
+  });
 
-   if (mealInput && dayInput) {
-       // use Method addMeal in MealPlanner
-       mealPlanner.addMeal(dayInput, mealInput);
-       
-       // display meal to UI
-       UI.displayMeal(dayInput, mealInput);
-       
-       // Clear form fields after adding
-       document.querySelector('#mealInput').value = '';
-       document.querySelector('#dayInput').value = '';
-   } else {
-       alert('Please enter a meal and select a day.');
-   }
-});
 
 // Event listener for recipe card clicks
 document.querySelector('#recipesContainer').addEventListener('click', async (e) => {
