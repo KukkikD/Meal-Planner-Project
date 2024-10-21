@@ -61,6 +61,6 @@ document.querySelector('#recipesContainer').addEventListener('click', async (e) 
 
 // Function to redirect to recipe page
 async function redirectToRecipePage(recipeId) {
-    const recipesUrl = `https://mealplannerwdd330.netlify.app/recipes.html/${recipeId}`;
-    window.location.href = recipesUrl + "?recipeId=" + recipeId;
+    const recipesUrl = "https://mealplannerwdd330.netlify.app/recipes.html";
+    window.location.href = `${recipesUrl}?recipeId=${recipeId}`;
 }
