@@ -61,5 +61,5 @@ document.querySelector('#recipesContainer').addEventListener('click', async (e) 
 
 // Function to redirect to recipe page
 async function redirectToRecipePage(recipeId) {
-    window.location.href = window.location.href = recipesUrl + "?recipeId=" + recipeId;;
+    window.location.href = recipesUrl + "?recipeId=" + recipeId;;
 }
