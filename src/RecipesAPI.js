@@ -1,5 +1,6 @@
 import { setLocalStorage, getLocalStorage } from "./utils.js";
-import RecipeSearch from './RecipeSearch.js';
+import RecipeSearch from "./RecipeSearch.js";
+import MealPlan from "./MealPlanner.js";
 
 
 // ฟังก์ชันดึงส่วนผสมจาก API โดยใช้ recipeId
@@ -72,21 +73,34 @@ if (recipeId) {
   console.error('Recipe ID not found in the URL');
 }
 
-// Management of adding menu items to weekly plans
 document.getElementById("addToPlanner").addEventListener("click", () => {
-  if (recipeId) {
-    let plannerItems = getLocalStorage("weekly-planner") || [];
-    
-    // Check if this menu has been added to the plan.
-    if (!plannerItems.includes(recipeId)) {
-      plannerItems.push(recipeId); // Add a menu to your weekly plan
-      setLocalStorage("weekly-planner", plannerItems); // อัปเดต LocalStorage
+  const day = document.getElementById("daySelect").value; // Get selected day
+  const recipeTitle = document.querySelector("#recipeContainer h2").textContent;
+  const recipeImage = document.querySelector("#recipeContainer img").src;
 
-      alert("Recipe added to your weekly planner!");
+  if (recipeId && day) {
+    const mealPlan = new MealPlan("weekly-planner", "#daySelect"); // Use MealPlan class
+
+    let plannerItems = getLocalStorage("weekly-planner") || {};
+
+    // Initialize the selected day if not exist
+    if (!plannerItems[day]) {
+      plannerItems[day] = [];
+    }
+
+    // Check if the recipe is already in the selected day
+    if (!plannerItems[day].some(item => item.id === recipeId)) {
+      plannerItems[day].push({ id: recipeId, title: recipeTitle, image: recipeImage });
+      setLocalStorage("weekly-planner", plannerItems);
+
+      alert(`Recipe added to ${day} in your weekly planner!`);
+
+      // Load updated planner UI
+      mealPlan.loadWeeklyPlan(); // Refresh UI to show the newly added recipe
     } else {
-      alert("This recipe is already in your weekly planner.");
+      alert(`This recipe is already in your ${day} plan.`);
     }
   } else {
-    alert("No recipe selected to add to the planner.");
+    alert("Please select a recipe and a day to add to the planner.");
   }
-})
+});

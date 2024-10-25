@@ -26,11 +26,17 @@ class UI {
    }
 
    static displayMeal(day, meal) {
-      // แสดงมื้ออาหารในวันที่เลือก
-      const dayListId = day.toLowerCase() + 'Meals'; // เช่น 'mondayMeals'
-      const mealItem = document.createElement('li');
-      mealItem.textContent = meal; // ตั้งค่าเป็นชื่อเมนู
-      document.getElementById(dayListId).appendChild(mealItem); // เพิ่มไปยังวันที่เลือก
+    // แสดงมื้ออาหารในวันที่เลือก
+    const dayListId = day.toLowerCase() + 'Meals'; // เช่น 'mondayMeals'
+    const mealItem = document.createElement('li');
+    mealItem.textContent = meal; // ตั้งค่าเป็นชื่อเมนู
+  
+    const dayList = document.getElementById(dayListId);
+    if (dayList) {
+      dayList.appendChild(mealItem); // เพิ่มไปยังวันที่เลือก
+    } else {
+      console.error(`Element with ID ${dayListId} not found.`);
+    }
   }
 
  

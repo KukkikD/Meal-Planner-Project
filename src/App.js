@@ -10,6 +10,7 @@ const recipeSearch = new RecipeSearch("a905b34156124719af649f3347619292");
 document.querySelector("#searchForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const query = document.querySelector("#searchInput").value;
+  console.log("Searching for:", query); // เพิ่มบรรทัดนี้เพื่อดูค่าของ query
   await searchRecipes(query);
 });
 
@@ -64,3 +65,5 @@ document
 async function redirectToRecipePage(recipeId) {
   window.location.href = "/recipes.html?recipeId=" + recipeId;
 }
+
+
