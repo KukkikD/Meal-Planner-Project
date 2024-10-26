@@ -24,13 +24,16 @@ async function searchRecipes(query) {
   }
 }
 
-// Event listener for adding meals
+// Event listener สำหรับการเพิ่มเมนูอาหาร
 document.querySelector("#addMealBtn").addEventListener("click", () => {
-  const mealInput = document.querySelector("#mealInput").value;
-  const dayInput = document.querySelector("#dayInput").value;
+  // จัดเก็บค่า DOM ที่ต้องการไว้ในตัวแปรเพียงครั้งเดียว
+  const mealInputValue = document.querySelector("#mealInput").value;
+  const dayInputValue = document.querySelector("#dayInput").value;
 
-  addMeal(dayInput, mealInput);
+  // เรียกใช้งานฟังก์ชัน addMeal
+  addMeal(dayInputValue, mealInputValue);
 });
+
 
 // Function to add meal
 function addMeal(day, meal) {
