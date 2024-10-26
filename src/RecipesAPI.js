@@ -73,10 +73,16 @@ if (recipeId) {
   console.error('Recipe ID not found in the URL');
 }
 
+// Event listener สำหรับการเพิ่มเมนูลงใน planner
 document.getElementById("addToPlanner").addEventListener("click", () => {
-  const day = document.getElementById("daySelect").value; // Get selected day
-  const recipeTitle = document.querySelector("#recipeContainer h2").textContent;
-  const recipeImage = document.querySelector("#recipeContainer img").src;
+  // จัดเก็บค่า DOM ที่ต้องการไว้ในตัวแปรเพียงครั้งเดียว
+  const day = document.getElementById("daySelect").value;
+  const recipeContainer = document.getElementById("recipeContainer");
+
+  // ตรวจสอบให้แน่ใจว่า recipeContainer มีข้อมูลที่ต้องการ
+  if (recipeContainer) {
+    const recipeTitle = recipeContainer.querySelector("h2").textContent;
+    const recipeImage = recipeContainer.querySelector("img").src;
 
   if (recipeId && day) {
     const mealPlan = new MealPlan("weekly-planner", "#daySelect"); // Use MealPlan class
@@ -103,4 +109,5 @@ document.getElementById("addToPlanner").addEventListener("click", () => {
   } else {
     alert("Please select a recipe and a day to add to the planner.");
   }
+}
 });
