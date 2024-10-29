@@ -1,37 +1,32 @@
 import { setLocalStorage, getLocalStorage } from "./utils.js";
-import RecipeSearch from "./RecipeSearch.js";
+import RecipeSearch  from "./RecipeSearch.js";
 import MealPlan from "./MealPlanner.js";
+import { UI } from "./UI.js";
 
+const mealPlan = new MealPlan();
 
-// ฟังก์ชันดึงส่วนผสมจาก API โดยใช้ recipeId
 async function getIngredients(recipeId) {
-  const apiKey = "a905b34156124719af649f3347619292"; // API Key ของคุณ
+  const apiKey = "a905b34156124719af649f3347619292";
   
   try {
     const response = await fetch(`https://api.spoonacular.com/recipes/${recipeId}/ingredientWidget.json?apiKey=${apiKey}`);
-    
-    //Check if the request was successful.
-    if (!response.ok) {
-      throw new Error(`Error fetching ingredients: ${response.statusText}`);
-    }
+    if (!response.ok) throw new Error(`Error fetching ingredients: ${response.statusText}`);
 
     const data = await response.json();
-    return data.ingredients; // return ingredients obtained from API
-
+    console.log("Ingredients data:", data.ingredients); // Debugging
+    return data.ingredients;
   } catch (error) {
     console.error('Error:', error);
-    return []; // return null if an error occurs
+    alert('An error occurred while retrieving data from the API. Please try again.');
+    return [];
   }
 }
 
-// Function to display ingredients in HTML page
 function renderIngredients(ingredients) {
   const ingredientsContainer = document.getElementById("ingredientsContainer");
-  ingredientsContainer.innerHTML = ""; // Clear old data
+  ingredientsContainer.innerHTML = "";
 
-  // วนลูปเพื่อแสดงส่วนผสมทีละตัว
   ingredients.forEach(ingredient => {
-    console.log(ingredient.image); // Show image URL in console
     const ingredientElement = document.createElement("div");
     ingredientElement.className = "ingredient-card";
     ingredientElement.innerHTML = `
@@ -41,73 +36,105 @@ function renderIngredients(ingredients) {
   });
 }
 
-// Recipe details display function
 function renderRecipe(recipe) {
-    const recipeContainer = document.getElementById("recipeContainer"); // ตรวจสอบให้แน่ใจว่ามี element นี้ใน HTML
-    recipeContainer.innerHTML = `
-      <h2>${recipe.title}</h2>
-      <img src="${recipe.image}" alt="${recipe.title}" />
-      <h3>Ingredients:</h3>
-      <div id="ingredientsContainer"></div>
-    `;
+  console.log("Loaded recipe data:", recipe); // Debugging
+  const recipeContainer = document.getElementById("recipeContainer");
+  recipeContainer.innerHTML = `
+    <h2>${recipe.title}</h2>
+    <img src="${recipe.image}" alt="${recipe.title}" />
+    <h3>Ingredients:</h3>
+    <div id="ingredientsContainer"></div>
+  `;
   
-    // Call the extract ingredients function
-    getIngredients(recipe.id) // Use recipe.id to fetch ingredients
-      .then(ingredients => renderIngredients(ingredients))
-      .catch(error => console.error(error));
-  }
+  getIngredients(recipe.id)
+    .then(ingredients => renderIngredients(ingredients))
+    .catch(error => console.error(error));
+}
 
-  // Get recipeId from URL (if any)
 const params = new URLSearchParams(window.location.search);
 const recipeId = params.get("recipeId");
 
 if (recipeId) {
-  const recipeSearch = new RecipeSearch("a905b34156124719af649f3347619292"); // my API Key 
-  recipeSearch.getRecipeById(recipeId) // This method must be created in RecipeSearch.
-    .then(recipe => {
-      renderRecipe(recipe); // Call a function to display formula details.
-    })
+  const recipeSearch = new RecipeSearch("a905b34156124719af649f3347619292");
+  recipeSearch.getRecipeById(recipeId)
+    .then(recipe => renderRecipe(recipe))
     .catch(error => console.error(error));
-
 } else {
   console.error('Recipe ID not found in the URL');
 }
 
-// Event listener สำหรับการเพิ่มเมนูลงใน planner
 document.getElementById("addToPlanner").addEventListener("click", () => {
-  // จัดเก็บค่า DOM ที่ต้องการไว้ในตัวแปรเพียงครั้งเดียว
   const day = document.getElementById("daySelect").value;
   const recipeContainer = document.getElementById("recipeContainer");
 
-  // ตรวจสอบให้แน่ใจว่า recipeContainer มีข้อมูลที่ต้องการ
   if (recipeContainer) {
     const recipeTitle = recipeContainer.querySelector("h2").textContent;
     const recipeImage = recipeContainer.querySelector("img").src;
 
-  if (recipeId && day) {
-    const mealPlan = new MealPlan("weekly-planner", "#daySelect"); // Use MealPlan class
+    if (recipeId && day) {
+      let plannerItems = getLocalStorage("weekly-planner") || {};
 
-    let plannerItems = getLocalStorage("weekly-planner") || {};
+      if (!plannerItems[day]) {
+        plannerItems[day] = [];
+      }
 
-    // Initialize the selected day if not exist
-    if (!plannerItems[day]) {
-      plannerItems[day] = [];
-    }
+      if (!plannerItems[day].some(item => item.id === recipeId)) {
+        plannerItems[day].push({ id: recipeId, title: recipeTitle, image: recipeImage });
+        setLocalStorage("weekly-planner", plannerItems);
 
-    // Check if the recipe is already in the selected day
-    if (!plannerItems[day].some(item => item.id === recipeId)) {
-      plannerItems[day].push({ id: recipeId, title: recipeTitle, image: recipeImage });
-      setLocalStorage("weekly-planner", plannerItems);
-
-      alert(`Recipe added to ${day} in your weekly planner!`);
-
-      // Load updated planner UI
-      mealPlan.loadWeeklyPlan(); // Refresh UI to show the newly added recipe
+        alert(`Recipe added to ${day} in your weekly planner!`);
+        addRecipeToDay(day, recipeId);
+        mealPlan.loadWeeklyPlan();
+      } else {
+        alert(`This recipe is already in your ${day} plan.`);
+      }
     } else {
-      alert(`This recipe is already in your ${day} plan.`);
+      alert("Please select a recipe and a day to add to the planner.");
+    }
+  }
+});
+
+function addRecipeToDay(day, recipeId) {
+  const validDays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+  if (!validDays.includes(day.toLowerCase())) {
+    console.error(`Invalid day provided: ${day}`);
+    return;
+  }
+
+  const weeklyPlan = getLocalStorage('weeklyPlan') || {};
+  if (!Array.isArray(weeklyPlan[day])) weeklyPlan[day] = [];
+
+  if (!weeklyPlan[day].includes(recipeId)) {
+    weeklyPlan[day].push(recipeId);
+    setLocalStorage('weeklyPlan', weeklyPlan);
+    console.log(`Added recipe ID: ${recipeId} to ${day}`);
+
+    const recipeTitle = getRecipeTitleById(recipeId);
+    if (recipeTitle !== "Recipe Title Not Found") {
+      UI.updateMealPlanner(day, recipeTitle);
     }
   } else {
-    alert("Please select a recipe and a day to add to the planner.");
+    console.log('Recipe already added for this day');
   }
 }
-});
+
+function getRecipeMap() {
+  const plannerItems = getLocalStorage("weeklyPlan") || {};
+  const recipeMap = new Map();
+
+  for (const day in plannerItems) {
+    if (Array.isArray(plannerItems[day])) {
+      plannerItems[day].forEach(item => {
+        recipeMap.set(item.id, item.title);
+      });
+    }
+  }
+
+  return recipeMap;
+}
+
+function getRecipeTitleById(recipeId) {
+  const recipeMap = getRecipeMap();
+  return recipeMap.get(recipeId) || "Recipe Title Not Found";
+} 

@@ -6,8 +6,9 @@
     <title>Meal Planner - Home</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./src/css/main.css">
-    <script src="./src/App.js" type="module"></script>
- 
+    <script src="./src/utils.js" type="module" defer></script>
+    <script src="./src/App.js" type="module" defer></script>
+    <script src="./src/Newsletter.js" type="module" defer></script>
 </head>
 <body>
     <header id="header-container">
@@ -21,43 +22,26 @@
       </nav>
     </header>
 
-  <main>
-    <section class="search-recipes">
-        <h2>Find Recipes</h2>
-        <form id="searchForm">
-            <label for="searchInput">Enter Meal or Ingredient:</label>
-            <input type="text" id="searchInput" placeholder="e.g., Chicken, Vegan">
-            <button type="submit">Search</button>
-        </form>
-    </section>
-
-    <section id="recipeResults">
-        <h2>Recipe Results</h2>
-        <div id="recipesContainer">
-            <!-- Recipe results will be injected here -->
-        </div>
-    </section>
-    <section class="add-meal">
-      <h2>Add a Meal</h2>
-      <div>
-          <label for="mealInput">Meal:</label>
-          <input type="text" id="mealInput" placeholder="Enter meal name">
-      </div>
-      <div>
-          <label for="dayInput">Day:</label>
-          <select id="dayInput">
-              <option value="">Select a day</option>
-              <option value="Monday">Monday</option>
-              <option value="Tuesday">Tuesday</option>
-              <option value="Wednesday">Wednesday</option>
-              <option value="Thursday">Thursday</option>
-              <option value="Friday">Friday</option>
-              <option value="Saturday">Saturday</option>
-              <option value="Sunday">Sunday</option>
-          </select>
-      </div>
-      <button id="addMealBtn">Add Meal</button>
-  </section>
+    <main>
+      <section class="search-recipes">
+          <h2>Find Recipes</h2>
+          <form id="searchForm">
+              <label for="searchInput">Enter Meal or Ingredient:</label>
+              <input type="text" id="searchInput" placeholder="e.g., Chicken, Vegan" required>
+              <button type="submit">Search</button>
+          </form>
+      </section>
+  
+      <section id="recipeResults">
+          <h2>Recipe Results</h2>
+          <div id="recipesContainer">
+              <!-- Recipe results will be injected here -->
+          </div>
+      </section>
+  
+      <section id="newsletter-container"></section>
+          </form>
+      </section>
   </main>
 
     <!-- Footer container -->

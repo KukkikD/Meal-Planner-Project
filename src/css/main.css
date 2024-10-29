@@ -107,14 +107,14 @@ main {
   padding: 0.5rem 1rem;
   font-size: 1rem;
   color: #fff;
-  background-color: #007bff;
+  background-color: #218838;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
 .search-recipes button:hover {
-  background-color: #0056b3;
+  background-color: var(--primary-color);
 }
 
 /* Recipe results section */
@@ -212,6 +212,119 @@ main {
   height: auto; /* ให้ความสูงตามสัดส่วน */
   margin-right: 10px; /* ช่องว่างระหว่างรูปภาพและข้อความ */
 }
+
+.newsletter {
+  background-color: #f3f3f3;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+.newsletter h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.newsletter p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+#newsletter-form input[type="email"] {
+  padding: 10px;
+  width: 80%;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+#newsletter-form button {
+  padding: 10px 20px;
+  background-color: #218838;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#newsletter-form button:hover {
+  background-color: var(--primary-color);
+}
+
+/* alert styles */
+.alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5em;
+  background-color: var(--primary-color);
+  border: 1px solid #1e7e34;
+}
+.alert > p {
+  margin: 0;
+}
+
+/* Container for the day selection section */
+.day-selection {
+  display: flex;
+  align-items: center; 
+  margin: 20px 0; 
+  background-color: #f9f9f9; 
+  padding: 15px; 
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+}
+
+/* Label for the day selection */
+#labelWeek {
+  font-size: 18px; 
+  margin-right: 10px; 
+  font-weight: 700; 
+  color: #333; 
+}
+
+/* Custom styles for the select dropdown */
+.custom-select {
+  padding: 10px; 
+  font-size: 16px; 
+  border: 2px solid var(--accent-color); 
+  border-radius: 5px; 
+  background-color: #ffffff; 
+  transition: border-color 0.3s ease;
+  margin-right: 10px; 
+}
+
+/* Styles for the select dropdown when focused */
+.custom-select:focus {
+  border-color: var(--secondary-font); 
+  outline: none; 
+}
+
+/* Styles for the button */
+.styled-button {
+  padding: 10px 15px; 
+  font-size: 16px; 
+  color: #ffffff; 
+  background-color: var(--primary-color); 
+  border: none; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  transition: background-color 0.3s ease; 
+}
+
+/* Styles for the button on hover */
+.styled-button:hover {
+  background-color: #218838; 
+}
+
+/* Styles for the button when clicked */
+.styled-button:active {
+  background-color: var(--primary-color); 
+}
+
 
 @media screen and (min-width: 500px) {
   body {

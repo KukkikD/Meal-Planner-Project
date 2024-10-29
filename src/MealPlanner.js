@@ -2,85 +2,89 @@ import { getLocalStorage, setLocalStorage } from './utils.js';
 
 export class MealPlanner {
   constructor() {
-     this.weeklyMeals = {}; // Object to store meals for each day
+    this.weeklyMeals = {}; // Object to store meals for each day
   }
 
   addMeal(day, meal) {
-     if (!this.weeklyMeals[day]) {
-        this.weeklyMeals[day] = [];
-     }
-     this.weeklyMeals[day].push(meal);
+    if (!this.weeklyMeals[day]) {
+      this.weeklyMeals[day] = [];
+    }
+    this.weeklyMeals[day].push(meal);
   }
 
   getMeals(day) {
-     return this.weeklyMeals[day] || [];
+    return this.weeklyMeals[day] || [];
   }
 
   generateShoppingList() {
-     // Logic to consolidate ingredients from all meals in the week
+    const shoppingList = {}; // Object to consolidate ingredients
+
+    // Iterate over each day and its meals
+    for (const day in this.weeklyMeals) {
+      this.weeklyMeals[day].forEach(meal => {
+        meal.ingredients.forEach(ingredient => {
+          // Consolidate ingredients into the shopping list
+          if (shoppingList[ingredient.name]) {
+            shoppingList[ingredient.name] += ingredient.amount; // Sum amounts if already exists
+          } else {
+            shoppingList[ingredient.name] = ingredient.amount; // Initialize amount if not exists
+          }
+        });
+      });
+    }
+
+    return shoppingList; // Return consolidated shopping list
   }
 }
-
 
 export default class MealPlan {
   constructor(key, dayListSelector) {
     this.key = key;
-    this.dayListSelector = dayListSelector; // Selector สำหรับวันที่ใน planner
+    this.dayListSelector = dayListSelector; // Selector for the days in the planner
+    this.weeklyPlan = getLocalStorage(this.key) || {}; // Load existing meals from local storage
   }
 
-  // ฟังก์ชันสำหรับเพิ่มรีเซพีใน planner
   addRecipe(day, recipe) {
-    const weeklyPlan = getLocalStorage(this.key) || {};
-    if (!weeklyPlan[day]) {
-      weeklyPlan[day] = []; // สร้างวันใหม่ถ้ายังไม่มี
+    if (!this.weeklyPlan[day]) {
+      this.weeklyPlan[day] = []; // Create a new day if it doesn’t exist yet
     }
 
-    // เพิ่มรีเซพีลงในวันที่กำหนด
-    weeklyPlan[day].push(recipe);
-    setLocalStorage(this.key, weeklyPlan); // อัพเดท LocalStorage
-    this.renderDayRecipes(day); // อัพเดท UI สำหรับวันที่นี้
+    // Add the recipe to the specified day
+    this.weeklyPlan[day].push(recipe);
+    setLocalStorage(this.key, this.weeklyPlan); // Update LocalStorage
+    this.renderDayRecipes(day); // Update UI for this day
   }
 
-  // ฟังก์ชันสำหรับลบรีเซพีจาก planner
   removeRecipe(day, recipeId) {
-    const weeklyPlan = getLocalStorage(this.key) || {};
-    if (weeklyPlan[day]) {
-      weeklyPlan[day] = weeklyPlan[day].filter(recipe => recipe.id !== recipeId); // ลบรีเซพีที่มี id ตรงกัน
-      setLocalStorage(this.key, weeklyPlan); // อัพเดท LocalStorage
-      this.renderDayRecipes(day); // อัพเดท UI สำหรับวันที่นี้
+    if (this.weeklyPlan[day]) {
+      this.weeklyPlan[day] = this.weeklyPlan[day].filter(recipe => recipe.id !== recipeId); // Remove the recipe with the matching id
+      setLocalStorage(this.key, this.weeklyPlan); // Update LocalStorage
+      this.renderDayRecipes(day); // Update UI for this day
     }
   }
 
-   renderDayRecipes(day) {
-    const weeklyPlan = getLocalStorage(this.key) || {};
-    
-    // ใช้ map ในการหา selector ที่ถูกต้อง
+  renderDayRecipes(day) {
     const dayMap = {
-      "Monday": "mondayMeals",
-      "Tuesday": "tuesdayMeals",
-      "Wednesday": "wednesdayMeals",
-      "Thursday": "thursdayMeals",
-      "Friday": "fridayMeals",
-      "Saturday": "saturdayMeals",
-      "Sunday": "sundayMeals",
+      'sunday': 'sundayMeals',
+      'monday': 'mondayMeals',
+      'tuesday': 'tuesdayMeals',
+      'wednesday': 'wednesdayMeals',
+      'thursday': 'thursdayMeals',
+      'friday': 'fridayMeals',
+      'saturday': 'saturdayMeals',
     };
 
-    if (!dayMap[day]) {
-      console.error(`Invalid day provided: ${day}`);
+    const dayList = document.querySelector(`#${dayMap[day.toLowerCase()]}`);
+
+    if (!dayList) {
+      console.error(`No element found for selector: #${dayMap[day]}`);
       return;
     }
-    
-    const dayList = document.querySelector(`#${dayMap[day]}`); // ใช้ map เพื่อหา selector
-  
-    if (!dayList) {
-      console.error(`No element found for selector: #${dayMap[day]}`); // ตรวจสอบว่าเจอ element หรือไม่
-      return; // ออกจากฟังก์ชันถ้าไม่พบ element
-    }
-  
-    dayList.innerHTML = ""; // ล้างรายการเก่า
-  
-    if (weeklyPlan[day]) {
-      weeklyPlan[day].forEach(recipe => {
+
+    dayList.innerHTML = ""; // Clear old items
+
+    if (this.weeklyPlan[day]) {
+      this.weeklyPlan[day].forEach(recipe => {
         const recipeItem = document.createElement("li");
         recipeItem.innerHTML = `
           <span>${recipe.title}</span>
@@ -89,28 +93,53 @@ export default class MealPlan {
         `;
         dayList.appendChild(recipeItem);
       });
-  
-      // เพิ่ม event listener ให้ปุ่มลบ
+
+      // Add event listener for the remove button
       dayList.querySelectorAll(".remove-recipe").forEach(button => {
         button.addEventListener("click", () => {
           const recipeId = button.dataset.id;
-          this.removeRecipe(day, recipeId); // เรียกใช้งานฟังก์ชันลบรีเซพี
+          this.removeRecipe(day, recipeId); // Call the function to remove the recipe
         });
       });
     }
   }
-  
-  // ฟังก์ชันสำหรับโหลดรีเซพีเมื่อหน้าโหลด
+
   loadWeeklyPlan() {
-    const weeklyPlan = getLocalStorage(this.key) || {};
-    Object.keys(weeklyPlan).forEach(day => {
-      this.renderDayRecipes(day);
+    // Render meals for each day on page load
+    const dayMap = {
+      "sunday": "sundayMeals",
+      "monday": "mondayMeals",
+      "tuesday": "tuesdayMeals",
+      "wednesday": "wednesdayMeals",
+      "thursday": "thursdayMeals",
+      "friday": "fridayMeals",
+      "saturday": "saturdayMeals",
+    };
+
+    Object.keys(this.weeklyPlan).forEach(day => {
+      const lowerCaseDay = day.toLowerCase();
+      if (lowerCaseDay in dayMap) {
+        this.renderDayRecipes(lowerCaseDay); // Render recipes for valid days
+      } else {
+        console.error(`Invalid day provided: ${day}`);
+      }
     });
   }
-  
-  // ฟังก์ชันเริ่มต้น
-  init() {
-    this.loadWeeklyPlan(); // โหลดข้อมูลรีเซพีเมื่อเริ่มต้น
-  }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const weeklyPlan = getLocalStorage('weekly-planner') || {};
+  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+  days.forEach(day => {
+    const dayList = document.getElementById(day); // ตรวจสอบให้แน่ใจว่า element นี้มีอยู่ใน HTML
+    if (dayList && weeklyPlan[day]) {
+      weeklyPlan[day].forEach(item => {
+        const recipeElement = document.createElement("li");
+        recipeElement.textContent = `${item.title} (ID: ${item.id})`; // คุณสามารถปรับแต่งได้ตามที่ต้องการ
+        dayList.appendChild(recipeElement);
+      });
+    }
+  });
+});
 
