@@ -23,7 +23,6 @@ export class MealPlanner {
     for (const day in this.weeklyMeals) {
       this.weeklyMeals[day].forEach(meal => {
         meal.ingredients.forEach(ingredient => {
-          // Consolidate ingredients into the shopping list
           if (shoppingList[ingredient.name]) {
             shoppingList[ingredient.name] += ingredient.amount; // Sum amounts if already exists
           } else {
@@ -48,11 +47,15 @@ export default class MealPlan {
     if (!this.weeklyPlan[day]) {
       this.weeklyPlan[day] = []; // Create a new day if it doesn’t exist yet
     }
-
-    // Add the recipe to the specified day
-    this.weeklyPlan[day].push(recipe);
-    setLocalStorage(this.key, this.weeklyPlan); // Update LocalStorage
-    this.renderDayRecipes(day); // Update UI for this day
+  
+    // Check if recipe is valid
+    if (recipe && recipe.id && recipe.title && recipe.image) {
+      this.weeklyPlan[day].push(recipe);
+      setLocalStorage(this.key, this.weeklyPlan); // Update LocalStorage
+      this.renderDayRecipes(day); // Update UI for this day
+    } else {
+      console.error('Invalid recipe:', recipe);
+    }
   }
 
   removeRecipe(day, recipeId) {
@@ -60,10 +63,15 @@ export default class MealPlan {
       this.weeklyPlan[day] = this.weeklyPlan[day].filter(recipe => recipe.id !== recipeId); // Remove the recipe with the matching id
       setLocalStorage(this.key, this.weeklyPlan); // Update LocalStorage
       this.renderDayRecipes(day); // Update UI for this day
+
+      console.log(`Recipe with ID ${recipeId} removed from ${day}.`);
+    } else {
+      console.error(`No recipes found for ${day}.`);
     }
   }
-
+    
   renderDayRecipes(day) {
+    console.log(`Rendering recipes for ${day}:`, this.weeklyPlan[day]);
     const dayMap = {
       'sunday': 'sundayMeals',
       'monday': 'mondayMeals',
@@ -73,17 +81,17 @@ export default class MealPlan {
       'friday': 'fridayMeals',
       'saturday': 'saturdayMeals',
     };
-
+  
     const dayList = document.querySelector(`#${dayMap[day.toLowerCase()]}`);
-
+  
     if (!dayList) {
       console.error(`No element found for selector: #${dayMap[day]}`);
       return;
     }
-
+  
     dayList.innerHTML = ""; // Clear old items
-
-    if (this.weeklyPlan[day]) {
+  
+    if (this.weeklyPlan[day] && this.weeklyPlan[day].length > 0) {
       this.weeklyPlan[day].forEach(recipe => {
         const recipeItem = document.createElement("li");
         recipeItem.innerHTML = `
@@ -93,7 +101,7 @@ export default class MealPlan {
         `;
         dayList.appendChild(recipeItem);
       });
-
+  
       // Add event listener for the remove button
       dayList.querySelectorAll(".remove-recipe").forEach(button => {
         button.addEventListener("click", () => {
@@ -101,45 +109,42 @@ export default class MealPlan {
           this.removeRecipe(day, recipeId); // Call the function to remove the recipe
         });
       });
+    } else {
+      // If no recipes are found for the day, show a message
+      dayList.innerHTML = `<p>No meals found for ${day}.</p>`;
     }
   }
 
   loadWeeklyPlan() {
     // Render meals for each day on page load
-    const dayMap = {
-      "sunday": "sundayMeals",
-      "monday": "mondayMeals",
-      "tuesday": "tuesdayMeals",
-      "wednesday": "wednesdayMeals",
-      "thursday": "thursdayMeals",
-      "friday": "fridayMeals",
-      "saturday": "saturdayMeals",
-    };
+    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
-    Object.keys(this.weeklyPlan).forEach(day => {
-      const lowerCaseDay = day.toLowerCase();
-      if (lowerCaseDay in dayMap) {
-        this.renderDayRecipes(lowerCaseDay); // Render recipes for valid days
+    console.log('Weekly plan contents:', this.weeklyPlan); // Log contents for debugging
+
+    days.forEach(day => {
+      if (this.weeklyPlan[day] && this.weeklyPlan[day].length > 0) {
+        this.renderDayRecipes(day); // Render recipes for valid days
       } else {
-        console.error(`Invalid day provided: ${day}`);
+        console.warn(`No meals found for: ${day}`); // Changed to warn for clarity
       }
     });
   }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const weeklyPlan = getLocalStorage('weekly-planner') || {};
-  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  const mealPlan = new MealPlan('weeklyPlan', 'dayListSelector'); // Adjust the second argument as needed
 
-  days.forEach(day => {
-    const dayList = document.getElementById(day); // ตรวจสอบให้แน่ใจว่า element นี้มีอยู่ใน HTML
-    if (dayList && weeklyPlan[day]) {
-      weeklyPlan[day].forEach(item => {
-        const recipeElement = document.createElement("li");
-        recipeElement.textContent = `${item.title} (ID: ${item.id})`; // คุณสามารถปรับแต่งได้ตามที่ต้องการ
-        dayList.appendChild(recipeElement);
-      });
-    }
-  });
+  // Manually add some test meals
+  mealPlan.addRecipe('sunday', { id: 1, title: 'Pasta', image: 'pasta.jpg', ingredients: [] });
+  mealPlan.addRecipe('monday', { id: 2, title: 'Salad', image: 'salad.jpg', ingredients: [] });
+
+  mealPlan.loadWeeklyPlan(); // Call to load and display the meal plan
 });
 
+//Use this code when API not limit
+//document.addEventListener("DOMContentLoaded", () => {
+//  const mealPlan = new MealPlan('weeklyPlan', 'dayListSelector'); // Adjust the second argument as needed
+
+  // Load existing meals from local storage
+//  mealPlan.loadWeeklyPlan(); // Call to load and display the meal plan
+//});

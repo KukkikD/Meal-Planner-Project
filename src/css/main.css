@@ -325,6 +325,43 @@ main {
   background-color: var(--primary-color); 
 }
 
+.remove-recipe {
+  background-color: var(--text-color); 
+  color: white; 
+  border: none; 
+  border-radius: 5px; 
+  padding: 10px 15px; 
+  cursor: pointer; 
+  transition: background-color 0.3s, transform 0.2s; 
+}
+
+.remove-recipe:hover {
+  background-color:#218838; 
+  transform: scale(1.05); 
+}
+
+.generate-shopping-list {
+  background-color: #28a745; 
+  color: white; 
+  border: none; 
+  border-radius: 5px; 
+  padding: 10px 15px; 
+  cursor: pointer; 
+  transition: background-color 0.3s, transform 0.2s; 
+  display: flex; 
+  align-items: center; 
+  margin-top: 10px;
+}
+
+.generate-shopping-list i {
+  margin-right: 5px; 
+}
+
+.generate-shopping-list:hover {
+  background-color: #218838; 
+  transform: scale(1.05); 
+}
+
 
 @media screen and (min-width: 500px) {
   body {
