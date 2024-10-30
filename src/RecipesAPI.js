@@ -1,6 +1,6 @@
 import { setLocalStorage, getLocalStorage } from "./utils.js";
 import RecipeSearch  from "./RecipeSearch.js";
-import MealPlan from "./MealPlanner.js";
+import { MealPlan } from "./MealPlan.js";
 import { UI } from "./UI.js";
 
 const mealPlan = new MealPlan();
@@ -9,8 +9,11 @@ async function getIngredients(recipeId) {
   const apiKey = "a905b34156124719af649f3347619292";
   
   try {
-    const response = await fetch(`https://api.spoonacular.com/recipes/${recipeId}/ingredientWidget.json?apiKey=${apiKey}`);
-    if (!response.ok) throw new Error(`Error fetching ingredients: ${response.statusText}`);
+    const response = await fetch(
+      `https://api.spoonacular.com/recipes/${recipeId}/ingredientWidget.json?apiKey=${apiKey}`
+    );
+    if (!response.ok)
+      throw new Error(`Error fetching ingredients: ${response.statusText}`);
 
     const data = await response.json();
     console.log("Ingredients data:", data.ingredients); // Debugging
@@ -26,7 +29,7 @@ function renderIngredients(ingredients) {
   const ingredientsContainer = document.getElementById("ingredientsContainer");
   ingredientsContainer.innerHTML = "";
 
-  ingredients.forEach(ingredient => {
+  ingredients.forEach((ingredient) => {
     const ingredientElement = document.createElement("div");
     ingredientElement.className = "ingredient-card";
     ingredientElement.innerHTML = `
@@ -47,8 +50,8 @@ function renderRecipe(recipe) {
   `;
   
   getIngredients(recipe.id)
-    .then(ingredients => renderIngredients(ingredients))
-    .catch(error => console.error(error));
+   .then((ingredients) => renderIngredients(ingredients))
+   .catch((error) => console.error(error));
 }
 
 const params = new URLSearchParams(window.location.search);
@@ -56,9 +59,10 @@ const recipeId = params.get("recipeId");
 
 if (recipeId) {
   const recipeSearch = new RecipeSearch("a905b34156124719af649f3347619292");
-  recipeSearch.getRecipeById(recipeId)
-    .then(recipe => renderRecipe(recipe))
-    .catch(error => console.error(error));
+  recipeSearch
+  .getRecipeById(recipeId)
+  .then((recipe) => renderRecipe(recipe))
+  .catch((error) => console.error(error));
 } else {
   console.error('Recipe ID not found in the URL');
 }
@@ -72,17 +76,23 @@ document.getElementById("addToPlanner").addEventListener("click", () => {
     const recipeImage = recipeContainer.querySelector("img").src;
 
     if (recipeId && day) {
-      let plannerItems = getLocalStorage("weekly-planner") || {};
+      let plannerItems = getLocalStorage("weeklyPlan") || {};
 
       if (!plannerItems[day]) {
         plannerItems[day] = [];
       }
 
-      if (!plannerItems[day].some(item => item.id === recipeId)) {
-        plannerItems[day].push({ id: recipeId, title: recipeTitle, image: recipeImage });
-        setLocalStorage("weekly-planner", plannerItems);
+      if (!plannerItems[day].some((item) => item.id === recipeId)) {
+        plannerItems[day].push({
+          id: recipeId,
+          title: recipeTitle,
+          image: recipeImage,
+        });
+
+        setLocalStorage("weeklyPlan", plannerItems);
 
         alert(`Recipe added to ${day} in your weekly planner!`);
+        
         addRecipeToDay(day, recipeId);
         mealPlan.loadWeeklyPlan();
       } else {
